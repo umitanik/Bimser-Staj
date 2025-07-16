@@ -105,7 +105,7 @@ def train_simple_model(df):
     with torch.no_grad():
         test_preds = model(X_test)
         test_acc = ((test_preds > 0.5).float().squeeze() == y_test).float().mean()
-        print(f"\n🎯 Test Accuracy: {test_acc:.4f}")
+        print(f"\n Test Accuracy: {test_acc:.4f}")
 
     model_data = {
         "model_state": model.state_dict(),
@@ -118,7 +118,7 @@ def train_simple_model(df):
     with open("complete_model.pkl", "wb") as f:
         pickle.dump(model_data, f)
 
-    print("💾 Tam model kaydedildi: complete_model.pkl")
+    print(" Tam model kaydedildi: complete_model.pkl")
 
     return model
 
@@ -144,14 +144,14 @@ def predict_new_customer(age, complaint, year_total, years_company):
             pred = 1 if prob > 0.5 else 0
             label = le.inverse_transform([pred])[0]
 
-        print(f"\n🔮 TAHMİN:")
+        print(f"\n TAHMİN:")
         print(f"   Müşteri: {age}yaş, {complaint}şikayet, {year_total}₺, {years_company}yıl")
         print(f"   Sonuç: {label}")
 
         return label
 
     except Exception as e:
-        print(f"❌ Tahmin hatası: {e}")
+        print(f" Tahmin hatası: {e}")
         return None
 
 #Model eğitimi ve tahmin fonksiyonları

@@ -1,36 +1,73 @@
-# 🔮 Müşteri Sadakat Tahmin Sistemi
+#  Müşteri Sadakat Tahmin Sistemi
 
 Docker Compose ile çalışan modern bir müşteri sadakat tahmin sistemi.
 
-## 🏗️ Sistem Mimarisi
+##  Sistem Mimarisi
 
 - **Frontend**: Streamlit (http://localhost:8501)
 - **Backend**: FastAPI (http://localhost:8000) 
 - **Database**: PostgreSQL (localhost:5432)
 - **Container**: Docker Compose ile orkestrasyon
 
-## 🚀 Hızlı Başlangıç
+## 📋 Gereksinimler
 
-### 1️⃣ İlk Kurulum (Sadece bir kez)
+###  Linux /  macOS /  Windows:
+- **Docker Desktop** yüklü olmalı
+- **Git** yüklü olmalı
+- **Terminal/Command Prompt** erişimi
+
+### macOS Kullanıcıları İçin:
+- Docker Desktop for Mac: [İndir](https://docs.docker.com/desktop/mac/install/)
+- Terminal uygulaması (varsayılan olarak yüklü)
+- Homebrew ile Git: `brew install git` (isteğe bağlı)
+
+### Windows Kullanıcıları İçin:
+- Docker Desktop for Windows: [İndir](https://docs.docker.com/desktop/windows/install/)
+- Git for Windows: [İndir](https://git-scm.com/download/win)
+- PowerShell veya Git Bash
+
+##  Hızlı Başlangıç
+
+###  Projeyi İlk Kez Klonlayanlar İçin:
 ```bash
+# 1. Projeyi klonla
+git clone https://github.com/umitanik/BimserStajProje_1.git
+cd BimserStajProje_1
+
+# 2. İlk kurulum (sadece bir kez)
 chmod +x setup.sh
 ./setup.sh
-```
 
-### 2️⃣ Sistemi Başlat
-```bash
+# 3. Sistemi başlat
 ./start.sh
 ```
 
-### 2️⃣ Web Arayüzüne Git
+###  Tek Komut ile Kurulum:
+```bash
+git clone https://github.com/umitanik/BimserStajProje_1.git && cd BimserStajProje_1 && chmod +x setup.sh && ./setup.sh && ./start.sh
+```
+
+###  Sonraki Kullanımlar:
+```bash
+# Sistemi başlat
+./start.sh
+
+# Sistemi durdur  
+./stop.sh
+
+# Sistemi yeniden başlat
+./restart.sh
+```
+
+### 2️ Web Arayüzüne Git
 [http://localhost:8501](http://localhost:8501)
 
-### 3️⃣ Sistemi Durdur
+### 3️ Sistemi Durdur
 ```bash
 ./stop.sh
 ```
 
-## 📋 Manuel Komutlar
+##  Manuel Komutlar
 
 ### Sistemi Başlat
 ```bash
@@ -59,7 +96,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-## 🔧 Geliştirme
+##  Geliştirme
 
 ### Streamlit Kodunu Güncelle
 1. `streamlit_app.py` dosyasını düzenle
@@ -76,7 +113,7 @@ docker-compose build api
 docker-compose up -d api
 ```
 
-## 🐛 Sorun Giderme
+##  Sorun Giderme
 
 ### API Bağlantı Hatası
 ```bash
@@ -108,23 +145,23 @@ docker-compose logs postgres
 docker-compose exec postgres psql -U admin -d musteri_db
 ```
 
-## 📦 Container Detayları
+##  Container Detayları
 
 - **musteri_postgres**: PostgreSQL 13
 - **musteri_api**: FastAPI + PyTorch
 - **musteri_streamlit**: Streamlit Web UI
 
-## 🌐 API Endpoints
+##  API Endpoints
 
 - `GET /` - API bilgileri
 - `GET /customers` - Müşteri listesi
 - `GET /stats` - İstatistikler
 - `POST /predict` - Sadakat tahmini
 
-## 📊 Özellikler
+##  Özellikler
 
-- ✅ Gerçek zamanlı tahmin
-- ✅ Veri görselleştirme  
-- ✅ Müşteri analizi
-- ✅ REST API entegrasyonu
-- ✅ Docker ile kolay deployment
+- Gerçek zamanlı tahmin
+- Veri görselleştirme  
+- Müşteri analizi
+- REST API entegrasyonu
+- Docker ile kolay deployment

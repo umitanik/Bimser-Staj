@@ -113,7 +113,7 @@ def insert_data_to_db(data: List[CustomerDataClass]):
         session.close()
 
 if __name__ == "__main__":
-    print("🚀 SQLAlchemy Database Kontrol...")
+    print(" SQLAlchemy Database Kontrol...")
 
     try:
         create_tables()
@@ -121,9 +121,9 @@ if __name__ == "__main__":
         success = insert_data_to_db(synthetic_data)
 
         if success:
-            print(f"\n✅ PostgreSQL Database hazır!")
+            print(f"\n PostgreSQL Database hazır!")
         else:
-            print("❌ Database işlemi başarısız!")
+            print(" Database işlemi başarısız!")
 
     except Exception as e:
-        print(f"❌ Beklenmeyen hata: {e}")
+        print(f" Beklenmeyen hata: {e}")

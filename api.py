@@ -22,10 +22,10 @@ def load_model():
     try:
         with open('complete_model.pkl', 'rb') as f:
             model_data = pickle.load(f)
-        print("✅ ML Model yüklendi")
+        print(" ML Model yüklendi")
         return True
     except Exception as e:
-        print(f"❌ Model yükleme hatası: {e}")
+        print(f" Model yükleme hatası: {e}")
         return False
 
 
@@ -41,24 +41,24 @@ def get_db():
 async def startup_event():
     try:
         create_tables()
-        print("✅ Veritabanı tabloları oluşturuldu")
+        print(" Veritabanı tabloları oluşturuldu")
         
         db = SessionLocal()
         count = db.query(CustomerDataClass).count()
         if count == 0:
-            print("📊 Sentetik veri ekleniyor...")
+            print(" Sentetik veri ekleniyor...")
             synthetic_data = generate_data(500)
             success = insert_data_to_db(synthetic_data)
             if success:
-                print("✅ 500 müşteri verisi eklendi")
+                print(" 500 müşteri verisi eklendi")
         else:
-            print(f"✅ Veritabanında {count} müşteri verisi mevcut")
+            print(f" Veritabanında {count} müşteri verisi mevcut")
         db.close()
         
         load_model()
         
     except Exception as e:
-        print(f"❌ Başlangıç hatası: {e}")
+        print(f" Başlangıç hatası: {e}")
 
 
 @app.get("/")
@@ -145,6 +145,7 @@ async def predict_loyalty(customer_data: Dict[str, Any]):
         # Hata durumunda basit tahmine geç
         print(f"ML Model hatası: {e}")
         return await predict_loyalty_simple(customer_data)
+
 
 async def predict_loyalty_simple(customer_data: Dict[str, Any]):
     """Basit kural tabanlı tahmin (fallback)"""
