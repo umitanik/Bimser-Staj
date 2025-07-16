@@ -11,7 +11,13 @@ Docker Compose ile çalışan modern bir müşteri sadakat tahmin sistemi.
 
 ## 🚀 Hızlı Başlangıç
 
-### 1️⃣ Sistemi Başlat
+### 1️⃣ İlk Kurulum (Sadece bir kez)
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+### 2️⃣ Sistemi Başlat
 ```bash
 ./start.sh
 ```
