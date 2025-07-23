@@ -109,24 +109,64 @@ test_words = [
     ("yönetim kurulu", "board of directors"),
     ("hisse", "stock"),
     ("bilanço", "balance sheet"),
+    ("muhasebe", "accounting"),
+    ("bütçe", "budget"),
+    ("nakit akışı", "cash flow"),
+    ("karlılık", "profitability"),
+    ("satış", "sales"),
+    ("pazarlama", "marketing"),
+    ("insan kaynakları", "human resources"),
+    ("işe alım", "recruitment"),
+    ("maaş bordrosu", "payroll"),
+    ("performans değerlendirmesi", "performance evaluation"),
+    ("operasyon", "operation"),
+    ("proje yönetimi", "project management"),
+    ("risk analizi", "risk analysis"),
+    ("iş planı", "business plan"),
+    ("strateji", "strategy"),
+    ("yatırım", "investment"),
 
     # Benzer Anlamlar (Orta similarity beklenir)
     ("fatura", "ödeme belgesi"),
     ("hisse", "pay"),
     ("yönetici", "müdür"),
     ("gider", "harcama"),
+    ("karlılık", "getiri"),
+    ("personel", "çalışan"),
+    ("müşteri", "istemci"),
+    ("satış", "ticaret"),
+    ("toplantı", "görüşme"),
+    ("rapor", "doküman"),
+    ("analiz", "inceleme"),
+    ("planlama", "organizasyon"),
 
     # Zıt Anlamlar (Düşük similarity beklenir)
     ("gelir", "gider"),
     ("kâr", "zarar"),
     ("aktif", "pasif"),
     ("alacak", "borç"),
+    ("satış", "satın alma"),
+    ("artış", "azalış"),
+    ("başarı", "başarısızlık"),
+    ("verimlilik", "verimsizlik"),
+    ("genişleme", "küçülme"),
+    ("yatırım", "geri çekme"),
+    ("yükselme", "düşüş"),
+    ("kazanç", "kayıp"),
 
     # İlgisiz Kelimeler (Çok düşük similarity beklenir)
     ("bilanço", "çalışan motivasyonu"),
     ("vergi", "şirket logosu"),
     ("sözleşme", "müzik listesi"),
-    ("yönetim kurulu", "hava durumu raporu")
+    ("yönetim kurulu", "hava durumu raporu"),
+    ("muhasebe", "spor müsabakası"),
+    ("mali rapor", "yemek tarifi"),
+    ("nakit akışı", "film eleştirisi"),
+    ("karlılık", "bahçe tasarımı"),
+    ("proje yönetimi", "moda trendi"),
+    ("risk analizi", "seyahat rehberi"),
+    ("performans değerlendirmesi", "müze koleksiyonu"),
+    ("insan kaynakları", "uzay araştırması")
 ]
 
 def average_pool(last_hidden_states: Tensor, attention_mask: Tensor) -> Tensor:
@@ -162,7 +202,8 @@ def run_comprehensive_test():
     
     all_results = []
     model_totals = { model_name: [] for model_name in models.keys() }
-    
+    model_wins = { model_name: 0 for model_name in models.keys() }
+
     for i, (word1, word2) in enumerate(test_words, 1):
         print(f"\n Test {i:2d}/{len(test_words)}: '{word1}' ↔ '{word2}'")
         print("-" * 60)
@@ -175,7 +216,7 @@ def run_comprehensive_test():
             model_totals['alibaba'].append(similarity)
             print(f"  {'Alibaba GTE':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'Alibaba GTE':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'Alibaba GTE':>15}: HATA - {str(e)[:28]}...")
             pair_results['alibaba'] = None
 
         try:
@@ -184,7 +225,7 @@ def run_comprehensive_test():
             model_totals['e5'].append(similarity)
             print(f"  {'E5 Multilingual':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'E5 Multilingual':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'E5 Multilingual':>15}: HATA - {str(e)[:28]}...")
             pair_results['e5'] = None
 
         try:
@@ -193,7 +234,7 @@ def run_comprehensive_test():
             model_totals['e5_small'].append(similarity)
             print(f"  {'E5 Small':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'E5 Small':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'E5 Small':>15}: HATA - {str(e)[:28]}...")
             pair_results['e5_small'] = None
 
         try:
@@ -202,7 +243,7 @@ def run_comprehensive_test():
             model_totals['distiluse_v1'].append(similarity)
             print(f"  {'DistilUSE v1':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'DistilUSE v1':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'DistilUSE v1':>15}: HATA - {str(e)[:28]}...")
             pair_results['distiluse_v1'] = None
 
         try:
@@ -211,7 +252,7 @@ def run_comprehensive_test():
             model_totals['nomic_ai'].append(similarity)
             print(f"  {'Nomic AI':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'Nomic AI':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'Nomic AI':>15}: HATA - {str(e)[:28]}...")
             pair_results['nomic_ai'] = None
 
         try:
@@ -220,7 +261,7 @@ def run_comprehensive_test():
             model_totals['labse'].append(similarity)
             print(f"  {'LaBSE':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'LaBSE':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'LaBSE':>15}: HATA - {str(e)[:28]}...")
             pair_results['labse'] = None
 
         try:
@@ -229,7 +270,7 @@ def run_comprehensive_test():
             model_totals['trendyol'].append(similarity)
             print(f"  {'Trendyol':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'Trendyol':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'Trendyol':>15}: HATA - {str(e)[:28]}...")
             pair_results['trendyol'] = None
 
         try:
@@ -238,8 +279,15 @@ def run_comprehensive_test():
             model_totals['snowflake'].append(similarity)
             print(f"  {'Snowflake Arctic':>15}: {similarity:.4f}")
         except Exception as e:
-            print(f"  {'Snowflake Arctic':>15}: HATA - {str(e)[:20]}...")
+            print(f"  {'Snowflake Arctic':>15}: HATA - {str(e)[:28]}...")
             pair_results['snowflake'] = None
+
+        valid_scores = {model: score for model, score in pair_results.items() if model not in ['word1', 'word2'] and score is not None}
+
+        # Sadece ilk 24 test (Türkçe-İngilizce çeviriler) için kazananı say
+        if valid_scores and i <= 24:  # i <= 24 çünkü ilk 24 test Türkçe-İngilizce çeviriler
+            best_model = max(valid_scores.items(), key=lambda x: x[1])[0]
+            model_wins[best_model] += 1
 
         all_results.append(pair_results)
     
@@ -258,27 +306,20 @@ def run_comprehensive_test():
         else:
             print(f"  {model_name:>15}: Test edilemedi")
     
-    if model_averages:
-        print(f"\n🥇 PERFORMANS SIRALAMASI:")
-        print("-" * 30)
-        sorted_models = sorted(model_averages.items(), key=lambda x: x[1], reverse=True)
-        for i, (model, score) in enumerate(sorted_models, 1):
-            print(f"  {i}. {model}: {score:.4f}")
-    
+
     print(f"\n📈 KATEGORİ ANALİZİ:")
     print("-" * 30)
     
     categories = {
-        'Türkçe-İngilizce Çeviriler': test_words[0:8],
-        'Benzer Anlamlar': test_words[8:12],
-        'Zıt Anlamlar': test_words[12:16],
-        'İlgisiz Kelimeler': test_words[16:20]
+        'Türkçe-İngilizce Çeviriler': test_words[0:24],
+        'Benzer Anlamlar': test_words[24:36],
+        'Zıt Anlamlar': test_words[36:48],
+        'İlgisiz Kelimeler': test_words[48:60]
     }
     
     for cat_name, cat_words in categories.items():
         print(f"\n  {cat_name}:")
         
-        # Her kategori için model performanslarını hesapla
         category_scores = {}
         for model_name in model_averages.keys():
             cat_scores = []
@@ -292,29 +333,18 @@ def run_comprehensive_test():
                 cat_avg = sum(cat_scores) / len(cat_scores)
                 category_scores[model_name] = cat_avg
         
-        # Büyükten küçüğe sırala ve yazdır
         sorted_category = sorted(category_scores.items(), key=lambda x: x[1], reverse=True)
         for model_name, score in sorted_category:
             print(f"    {model_name:>15}: {score:.4f}")
     
-    print(f"\n🎯 EN YÜKSEK SİMİLARİTY SKORLARI:")
-    print("-" * 40)
-    all_scores = []
-    for result in all_results:
-        for model_name, score in result.items():
-            if model_name not in ['word1', 'word2'] and score is not None:
-                all_scores.append((f"{result['word1']}-{result['word2']}", model_name, score))
-    
-    all_scores.sort(key=lambda x: x[2], reverse=True)
-    for pair, model, score in all_scores[:5]:
-        print(f"  {pair:>25} - {model}: {score:.4f}")
-    
-    print(f"\n📉 EN DÜŞÜK SİMİLARİTY SKORLARI:")
-    print("-" * 40)
-    for pair, model, score in all_scores[-5:]:
-        print(f"  {pair:>25} - {model}: {score:.4f}")
-    
+    print(f"\n🥊 TÜRKÇE-İNGİLİZCE ÇEVİRİ BAŞARI SONUÇLARI:")
+    print("-" * 45)
+    sorted_wins = sorted(model_wins.items(), key=lambda x: x[1], reverse=True)
+    for i, (model, score) in enumerate(sorted_wins, 1):
+        print(f"  {i}. {model}: {score}/24 test kazandı")
+
     return all_results, model_averages
+
 
 if __name__ == "__main__":
     print("🔧 Modeller yükleniyor...")
