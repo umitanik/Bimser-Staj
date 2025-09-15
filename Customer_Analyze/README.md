@@ -31,32 +31,31 @@ Docker Compose ile çalışan modern bir müşteri sadakat tahmin sistemi.
 ###  Projeyi İlk Kez Klonlayanlar İçin:
 ```bash
 # 1. Projeyi klonla
-git clone https://github.com/umitanik/BimserStajProje_1.git
-cd BimserStajProje_1
+git clone <repository-url>
+cd Customer_Analyze
 
-# 2. İlk kurulum (sadece bir kez)
-chmod +x setup.sh
-./setup.sh
+# 2. Docker container'ları build et
+docker-compose build
 
 # 3. Sistemi başlat
-./start.sh
+docker-compose up -d
 ```
 
 ###  Tek Komut ile Kurulum:
 ```bash
-git clone https://github.com/umitanik/BimserStajProje_1.git && cd BimserStajProje_1 && chmod +x setup.sh && ./setup.sh && ./start.sh
+git clone <repository-url> && cd Customer_Analyze && docker-compose build && docker-compose up -d
 ```
 
 ###  Sonraki Kullanımlar:
 ```bash
 # Sistemi başlat
-./start.sh
+docker-compose up -d
 
 # Sistemi durdur  
-./stop.sh
+docker-compose down
 
 # Sistemi yeniden başlat
-./restart.sh
+docker-compose restart
 ```
 
 ### 2️ Web Arayüzüne Git
@@ -64,7 +63,7 @@ git clone https://github.com/umitanik/BimserStajProje_1.git && cd BimserStajProj
 
 ### 3️ Sistemi Durdur
 ```bash
-./stop.sh
+docker-compose down
 ```
 
 ##  Manuel Komutlar
@@ -81,6 +80,10 @@ docker-compose ps
 
 ### Logları Görüntüle
 ```bash
+# Tüm servislerin logları
+docker-compose logs
+
+# Spesifik servis logları
 docker-compose logs streamlit
 docker-compose logs api
 docker-compose logs postgres
@@ -91,9 +94,16 @@ docker-compose logs postgres
 docker-compose down
 ```
 
+### Container'ları Yeniden Build Et
+```bash
+docker-compose build
+docker-compose up -d
+```
+
 ### Tüm Verileri Sil (Dikkat!)
 ```bash
 docker-compose down -v
+docker system prune -a
 ```
 
 ##  Geliştirme
@@ -106,14 +116,32 @@ docker-compose restart streamlit
 ```
 
 ### API Kodunu Güncelle
-1. `api.py` dosyasını düzenle
+1. `API.py` dosyasını düzenle
 2. Container'ı yeniden build et:
 ```bash
 docker-compose build api
 docker-compose up -d api
 ```
 
+### Model Güncelleme
+1. `complete_model.pkl` dosyasını güncelle
+2. API container'ını yeniden başlat:
+```bash
+docker-compose restart api
+```
+
 ##  Sorun Giderme
+
+### Portlar Kullanımda Hatası
+```bash
+# Kullanılan portları kontrol et
+lsof -i :8501  # Streamlit portu
+lsof -i :8000  # FastAPI portu
+lsof -i :5432  # PostgreSQL portu
+
+# Çakışan servisleri durdur
+sudo kill -9 <PID>
+```
 
 ### API Bağlantı Hatası
 ```bash
@@ -134,6 +162,8 @@ docker-compose logs streamlit
 
 # Streamlit'i yeniden başlat
 docker-compose restart streamlit
+
+# Browser cache'ini temizle
 ```
 
 ### Veritabanı Hatası
@@ -141,27 +171,63 @@ docker-compose restart streamlit
 # PostgreSQL loglarını kontrol et
 docker-compose logs postgres
 
-# Veritabanına bağlan
+# Veritabanına bağlan (eğer varsa)
 docker-compose exec postgres psql -U admin -d musteri_db
+
+# Volume'ları temizle
+docker-compose down -v
+```
+
+### Docker Build Hatası
+```bash
+# Cache'siz build
+docker-compose build --no-cache
+
+# Docker system temizle
+docker system prune -a
+
+# Yeniden build ve başlat
+docker-compose build && docker-compose up -d
 ```
 
 ##  Container Detayları
 
-- **musteri_postgres**: PostgreSQL 13
-- **musteri_api**: FastAPI + PyTorch
-- **musteri_streamlit**: Streamlit Web UI
+- **streamlit**: Streamlit Web UI (Port: 8501)
+- **api**: FastAPI Backend (Port: 8000)  
+- **postgres**: PostgreSQL Database (Port: 5432) - eğer kullanılıyorsa
 
 ##  API Endpoints
 
 - `GET /` - API bilgileri
-- `GET /customers` - Müşteri listesi
+- `GET /customers` - Müşteri listesi  
 - `GET /stats` - İstatistikler
 - `POST /predict` - Sadakat tahmini
 
 ##  Özellikler
 
-- Gerçek zamanlı tahmin
-- Veri görselleştirme  
-- Müşteri analizi
-- REST API entegrasyonu
-- Docker ile kolay deployment
+- ✅ Gerçek zamanlı tahmin
+- ✅ Veri görselleştirme  
+- ✅ Müşteri analizi
+- ✅ REST API entegrasyonu
+- ✅ Docker ile kolay deployment
+- ✅ Machine Learning model entegrasyonu
+
+##  Dosya Yapısı
+
+```
+Customer_Analyze/
+├── API.py                 # FastAPI backend
+├── streamlit_app.py       # Streamlit frontend
+├── data_processing.py     # Veri işleme
+├── database.py           # Veritabanı işlemleri
+├── complete_model.pkl    # Eğitilmiş ML modeli
+├── docker-compose.yml    # Container orkestrasyon
+├── Dockerfile           # API container tanımı
+├── Dockerfile.streamlit # Streamlit container tanımı
+├── requirements.txt     # Python bağımlılıkları
+└── README.md           # Bu dosya
+```
+
+##  İletişim
+
+Sorunlar için issue açabilir veya geliştirici ile iletişime geçebilirsiniz.
